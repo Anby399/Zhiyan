@@ -44,6 +44,8 @@ Zhiyan/
 
 建议课堂阅读顺序：`cli.py → pipeline.py → loaders.py / retrieval.py → models.py / stores/`。
 
+各模块已按实际处理顺序添加中文教学注释，说明输入、处理目的和输出。项目协作约定见 `AGENTS.md`：后续代码修改同时维护注释，使用 `lang_env` 验证后提交并推送到现有 GitHub 远程分支。
+
 ```text
 导入：PDF → PyMuPDF → 分块 → MySQL（片段、文件名、页码）
                           → BGE-M3 → Milvus（dense + 内置 BM25 sparse）

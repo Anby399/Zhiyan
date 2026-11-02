@@ -2,25 +2,29 @@
 
 import io
 import copy
-import shutil
 import tempfile
 import unittest
 from contextlib import redirect_stdout
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 from pymilvus import MilvusClient
 
 from rag_demo import pipeline, retrieval
-from rag_demo.config import ROOT, COLLECTION, PREFIX, STORAGE
+from rag_demo.config import COLLECTION, PREFIX, STORAGE
 from rag_demo.loaders import read_pdf
+from rag_demo.sample import sample
 from rag_demo.stores import vector
 
 
 class RagTests(unittest.TestCase):
     def test_sample_pdf_keeps_source_pages(self):
+        # 准备：在临时目录生成资料，克隆仓库后无需预先拥有被忽略的 demo.pdf。
         with tempfile.TemporaryDirectory() as folder:
-            shutil.copyfile(ROOT / "data" / "demo.pdf", folder + "/demo.pdf")
-            rows = read_pdf(folder)
+            with patch("rag_demo.sample.ROOT", Path(folder)), redirect_stdout(io.StringIO()):
+                sample()
+            # 执行：使用真实解析器提取临时 PDF，并核对页码与来源。
+            rows = read_pdf(Path(folder) / "data")
         self.assertEqual({r["page"] for r in rows}, set(range(1, 6)))
         self.assertTrue(all(r["source"] == "demo.pdf" for r in rows))
 
