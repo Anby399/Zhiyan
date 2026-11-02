@@ -1,0 +1,30 @@
+# 非敏感的教学参数；连接地址与密钥在 .env 中配置。
+[pdf]
+chunk_size = 500
+chunk_overlap = 80
+
+[models]
+embedding = "BAAI/bge-m3"
+reranker = "BAAI/bge-reranker-v2-m3"
+device = "cpu"
+embedding_dimension = 1024
+batch_size = 8
+reranker_max_length = 1024
+
+[retrieval]
+recall_k = 10
+fusion_k = 10
+top_k = 3
+dense_weight = 0.6
+bm25_weight = 0.4
+
+[storage]
+collection = "teaching_rag_chunks"
+cache_prefix = "teaching_rag:"
+cache_ttl = 3600
+ingest_batch_size = 16
+
+[llm]
+temperature = 0.0
+timeout = 60
+max_retries = 1
